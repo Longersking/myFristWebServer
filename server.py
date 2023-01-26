@@ -13,7 +13,7 @@ def handle_client_request(new_socket):
     request_list = recv_context.split(" ", 2)
     # 获取请求资源的路径
     request_path = request_list[1]
-    #print(request_path)
+    print(request_path)
 
     # 判断请求的是否为根目录,如果是根目录设置返回的信息
     if request_path == '/':
