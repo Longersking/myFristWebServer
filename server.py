@@ -13,7 +13,7 @@ def handle_client_request(new_socket):
     request_list = recv_context.split(" ", 2)
     # 获取请求资源的路径
     request_path = request_list[1]
-    print(request_path)
+    #print(request_path)
 
     # 判断请求的是否为根目录,如果是根目录设置返回的信息
     if request_path == '/':
@@ -32,7 +32,14 @@ def handle_client_request(new_socket):
         response_line = "HTTP/1.1 404 Not Found\r\n"
         # 响应头
         response_header = "Server: PWS/1.0\r\n"
-        pass
+        # 响应体
+        with open("static/404.html",'rb') as f:
+            error_data = f.read()
+        response_body = error_data
+        # 把数据封装成HTTP响应报文
+        response = (response_line + response_header + "\r\n").encode("utf-8") + response_body
+        # 发送给浏览器的响应头报文数据
+        new_socket.send(response)
     else:
         # 代码执行至此说明文件存在
         # 提示安全的打开文件
