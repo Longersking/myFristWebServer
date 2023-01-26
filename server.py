@@ -3,13 +3,13 @@ import threading
 
 #创建服务器类
 class HttpWebServer(object):
-    def __init__(self):
+    def __init__(self,port):
         # 创建tcp服务端套接字
         self.tcp_server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # 设置端口号复用程序退出，端口号立即释放
         self.tcp_server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, True)
         # 绑定端口号
-        self.tcp_server_socket.bind(("", 8000))
+        self.tcp_server_socket.bind(("", port))
         # 设置监听
         self.tcp_server_socket.listen(128)
 
@@ -35,7 +35,7 @@ class HttpWebServer(object):
         # 1、os.path.exits
         # os.path.exists("static/" + request_path)
         # 2、异常
-        print(request_path)
+        #print(request_path)
         try:
             # 打开文件读取数据
             with open("static" + request_path, 'rb') as f:
@@ -87,8 +87,21 @@ class HttpWebServer(object):
             sub_thread.start()
 #函数主方法
 def main():
+    #获取终端命令行参数
+    params = input("请输入端口号:")
+    # print(params)
+    #判断第二个参数是否都是由数字组成的字符串
+    while True:
+        if not params.isdigit():
+            print("请输入正确的端口号!!!（纯数字）")
+            params = input("请输入端口号:")
+        else:
+            break
+    # 代码执行至此说明命令行参数的个数一定是两个,并且参数合理
+    port = int(params)
+
     #服务器类实例化
-    web_server = HttpWebServer()
+    web_server = HttpWebServer(port)
     #启动服务器
     web_server.start()
 
